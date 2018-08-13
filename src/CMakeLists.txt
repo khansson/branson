@@ -39,6 +39,43 @@ elseif( ${SITENAME} MATCHES "ccscs[0-9]+" )
 elseif( ${SITENAME} MATCHES "nid[0-9]+" )
   set( SITENAME "Trinitite")
   set(TRINITITE_NODE TRUE)
+else()
+  # unknown machine (possibly a local machine)
+  # use built-in CMake find_path() to locate parmetis / metis / boost:
+  # If you install somewhere other than usr/local, change the value of
+  # the default install variable:
+  set(DEFAULT_INSTALL /usr/local/)
+
+  # parmetis:
+  find_path( ParMETIS_ROOT_DIR
+    NAMES include/parmetis.h
+    HINTS ${DEFAULT_INSTALL}
+  )
+  # metis:
+  find_path( METIS_ROOT_DIR
+    NAMES include/metis.h
+    HINTS ${DEFAULT_INSTALL}
+  )
+  # boost (headers only):
+  find_path( BOOST_ROOT
+    NAMES include/boost/property_tree/ptree.hpp
+    HINTS ${DEFAULT_INSTALL}
+  )
+   #vtk:
+  find_path( VTK_DIR
+	NAMES include/vtkObject.h
+    HINTS ${DEFAULT_INSTALL}
+  )
+  
+  set(ENV{ParMETIS_ROOT_DIR} ${ParMETIS_ROOT_DIR})
+  set(ENV{METIS_ROOT_DIR} ${METIS_ROOT_DIR})
+  set(ENV{BOOST_ROOT} ${BOOST_ROOT})
+  #set(ENV{VTK_ROOT_DIR} ${VTK_ROOT_DIR})
+  set(ENV{PARMETIS_INC_DIR} ${ParMETIS_ROOT_DIR}/include)
+  set(ENV{METIS_INC_DIR} ${METIS_ROOT_DIR}/include)
+  set(ENV{PARMETIS_LIB_DIR} ${ParMETIS_ROOT_DIR}/lib)
+  set(ENV{METIS_LIB_DIR} ${METIS_ROOT_DIR}/lib)
+  #set(ENV{VTK_LIB_DIR} ${VTK_ROOT_DIR}/lib)
 endif()
 set( SITENAME ${SITENAME} CACHE "STRING" "Name of the current machine" FORCE)
 message("Machine name: ${SITENAME}")
@@ -57,7 +94,6 @@ set( BRANSON_FLAGS "${BRANSON_FLAGS} -std=c++11")
 # Cray flag for C++11
 #set (DEBUG_FLAGS "${DEBUG_FLAGS} -h std=c++11")
 
-
 set (BRANSON_BUILD_TYPE  ${CMAKE_BUILD_TYPE})
 if ("${BRANSON_BUILD_TYPE}x" STREQUAL "x")
   message("CMAKE_BUILD_TYPE not set, setting to \"Release\"")
@@ -65,7 +101,6 @@ if ("${BRANSON_BUILD_TYPE}x" STREQUAL "x")
 else ()
   message("CMAKE_BUILD_TYPE set on command line: ${CMAKE_BUILD_TYPE}")
 endif ()
-
 
 if ("${BRANSON_BUILD_TYPE}" STREQUAL "Debug")
   message("CMake build type = Debug")
@@ -83,10 +118,12 @@ if ("${SITENAME}" STREQUAL "Moonlight" OR ${SITENAME} MATCHES "ccscs[0-9]+" OR "
   set(CMAKE_CXX_COMPILER mpic++)
 elseif ("${SITENAME}" STREQUAL "Trinitite")
   set(CMAKE_CXX_COMPILER cc)
+else ()
+  set (CMAKE_CXX_COMPILER mpic++)
 endif ()
 message ("Compiler: " ${CMAKE_CXX_COMPILER} )
 
-include(ExternalProject)
+# include(ExternalProject)
 ###############################################################################
 # Caliper
 ###############################################################################
@@ -145,6 +182,33 @@ else ()
   message("OPTIONAL: Visualization libraries not loaded...skipping")
 endif ()
 
+
+###############################################################################
+# VTK libraries
+# Load modules for vtk to get correct environment variables
+# use find package
+###############################################################################
+#message("EXTRA OPTIONAL: vtk from: $ENV{SILO_ROOT_DIR} " )
+#include_directories($ENV{VTK_ROOT_DIR}/include)
+#link_directories($ENV{VTK}/lib)
+#if ("$ENV{VTK_ROOT_DIR}x" STREQUAL "x")
+#  set(VTK_FOUND FALSE)
+#else ()
+#  set(VTK_FOUND TRUE)
+#endif ()
+#message("OPTIONAL: SILO_FOUND = ${SILO_FOUND}")
+
+#set(VTK_DIR "PATH/TO/VTK/BUILD/DIRECTORY")
+#message("EXTRA OPTIONAL: pray that vtk is from: ${VTK_DIR} " )
+find_package(VTK)
+message("EXTRA OPTIONAL: vtk from: ${VTK_DIR} " )
+if (VTK_FOUND)
+	message("EXTRA OPTIONAL: we got vtk (?) " )
+  set(VTK_LIBRARIES_FOUND TRUE)
+else ()
+  message("OPTIONAL: VTK libraries not loaded...skipping")
+endif ()
+
 ###############################################################################
 # Set up libraries for Cray RMA routines
 ###############################################################################
@@ -176,6 +240,10 @@ target_link_libraries(BRANSON metis)
 if (VIZ_LIBRARIES_FOUND)
   target_link_libraries(BRANSON hdf5)
   target_link_libraries(BRANSON siloh5)
+endif ()
+
+if (VTK_FOUND)
+  target_link_libraries(BRANSON ${VTK_LIBRARIES})
 endif ()
 
 enable_testing()

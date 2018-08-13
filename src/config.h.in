@@ -18,6 +18,7 @@
 #cmakedefine SNOW_NODE
 #cmakedefine TRINITITE_NODE
 #cmakedefine CCS_NODE
+#cmakedefine VTK_LIBRARIES_FOUND
 
 #endif // def config_h_
 //----------------------------------------------------------------------------//

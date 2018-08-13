@@ -1,0 +1,1 @@
+mpic++   -g -Wall -std=c++11 -O3 -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/test_parmetis_1_exe.dir/test_parmetis.cc.o  -o test_parmetis_1_exe -lparmetis -lmetis 

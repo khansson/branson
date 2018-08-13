@@ -24,6 +24,8 @@
 #include "constants.h"
 #include "config.h"
 #include "imc_state.h"
+#include "write_ascii.h"
+#include "write_vtk.h"
 
 //! All ranks perform reductions to produce global arrays and rank zero
 // writes the SILO file for visualization
@@ -31,7 +33,7 @@ void write_silo(Mesh *mesh, const double& arg_time, const uint32_t& step,
   const double& r_transport_time, const double& r_mpi_time, const int& rank,
   const int& n_rank, std::vector<uint32_t>& rank_requests) 
 {
-
+	
 #ifdef VIZ_LIBRARIES_FOUND
   using std::array;
   using std::stringstream;
@@ -261,6 +263,8 @@ void write_silo(Mesh *mesh, const double& arg_time, const uint32_t& step,
     // close file
     DBClose(dbfile);
   } // end rank==0
+  #else
+   
 #endif
 }
 

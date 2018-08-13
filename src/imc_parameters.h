@@ -36,7 +36,8 @@ class IMC_Parameters
       completion_method(input->get_completion_routine()),
       batch_size(input->get_batch_size()),
       particle_message_size(input->get_particle_message_size()),
-      write_silo_flag(input->get_write_silo_bool())
+      write_silo_flag(input->get_write_silo_bool()),
+      write_vtk_flag(input->get_write_vtk_bool())
     {}
 
   //! destructor
@@ -69,6 +70,9 @@ class IMC_Parameters
 
   //! Get SILO write flag
   bool get_write_silo_flag(void) const {return write_silo_flag;}
+  
+    //! Get VTK write flag
+  bool get_write_vtk_flag(void) const {return write_vtk_flag;}
 
   //--------------------------------------------------------------------------//
   // member data                                                              //
@@ -87,6 +91,7 @@ class IMC_Parameters
   uint32_t batch_size; //!< How often to check for MPI passed data
   uint32_t particle_message_size; //!< Preferred number of particles in MPI sends
   bool write_silo_flag; //!< Write SILO output files flag
+  bool write_vtk_flag; //!< Write VTK output files flag
 };
 
 #endif // imc_parameters_h_

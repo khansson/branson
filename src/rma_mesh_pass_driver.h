@@ -125,6 +125,16 @@ void imc_rma_mesh_pass_driver(Mesh *mesh,
         imc_state->get_rank_transport_runtime(), 
         imc_state->get_rank_mpi_time(), rank, n_rank, n_requests);
     }
+    
+    if (imc_parameters->get_write_vtk_flag()) {
+      // write VTK file
+      vector<uint32_t> n_requests = rma_manager->get_n_request_vec();
+      write_vtk(mesh, imc_state->get_time(), imc_state->get_step(), 
+        imc_state->get_rank_transport_runtime(), 
+        imc_state->get_rank_mpi_time(), rank, n_rank, n_requests);
+    }
+    
+    
     //reset rma_manager object for next timestep
     rma_manager->end_timestep();
 

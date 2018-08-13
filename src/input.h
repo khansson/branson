@@ -110,6 +110,12 @@ class Input
           std::string("FALSE"));
         if (tempString == "TRUE") write_silo = true;
         else write_silo = false;
+        
+        // write vtk flag
+        tempString = v.second.get<std::string>("write_vtk",
+          std::string("FALSE"));
+        if (tempString == "TRUE") write_vtk = true;
+        else write_vtk = false;
 
         // completion message type
         tempString = v.second.get<std::string>("completion_routine",
@@ -423,7 +429,8 @@ class Input
       else cout<<"SILO output disabled (default)"<<endl;
     #else
       if (write_silo)
-        cout<<"NOTE: SILO libraries not linked... no visualization"<<endl;
+        //cout<<"NOTE: SILO libraries not linked... no visualization"<<endl;
+        cout<<"NOTE: SILO libraries not linked... writting ascii instead"<<endl;
     #endif
     cout<<"Spatial Information -- cells x,y,z: "<<n_global_x_cells<<" ";
     cout<<n_global_y_cells<<" "<<n_global_z_cells<<endl;
@@ -560,6 +567,8 @@ class Input
   bool get_stratified_bool(void) const {return use_strat;}
   //! Return the value of the write SILO option
   bool get_write_silo_bool(void) const {return write_silo;}
+  //! Return the value of the write VTK option
+  bool get_write_vtk_bool(void) const {return write_vtk;}
   //! Return the value of the verbose printing option
   bool get_verbose_print_bool(void) const {return print_verbose;}
   //! Return the value of the mesh print option
@@ -627,6 +636,7 @@ class Input
   bool using_simple_mesh; //!< Use the simple mesh specification
   bool using_detailed_mesh; //!< Use the detailed mesh specification
   bool write_silo; //!< Dump SILO output files
+  bool write_vtk; //!< Dump SILO output files
 
   Constants::bc_type bc[6]; //!< Boundary condition array
 

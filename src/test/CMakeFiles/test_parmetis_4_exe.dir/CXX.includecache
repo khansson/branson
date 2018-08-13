@@ -1,0 +1,46 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/khansson/Code/branson/src/test/test_parmetis.cc
+iostream
+-
+numeric
+-
+mpi.h
+-
+parmetis.h
+-
+vector
+-
+
+/usr/local/include/metis.h
+limits.h
+-
+inttypes.h
+-
+
+/usr/local/include/mpi.h
+stddef.h
+-
+mpi_portable_platform.h
+/usr/local/include/mpi_portable_platform.h
+openmpi/ompi/mpi/cxx/mpicxx.h
+/usr/local/include/openmpi/ompi/mpi/cxx/mpicxx.h
+
+/usr/local/include/mpi_portable_platform.h
+omp.h
+/usr/local/include/omp.h
+omp.h
+/usr/local/include/omp.h
+
+/usr/local/include/parmetis.h
+mpi.h
+-
+metis.h
+-
+

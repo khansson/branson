@@ -1,0 +1,1 @@
+mpic++   -g -Wall -std=c++11 -O3 -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/test_input_exe.dir/test_input.cc.o  -o test_input_exe 

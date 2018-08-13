@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/khansson/Code/branson/src/constants.h
+
+/Users/khansson/Code/branson/src/photon.h
+iostream
+-
+vector
+-
+cmath
+-
+constants.h
+/Users/khansson/Code/branson/src/constants.h
+
+/Users/khansson/Code/branson/src/test/test_photon.cc
+iostream
+-
+../photon.h
+/Users/khansson/Code/branson/src/photon.h
+testing_functions.h
+/Users/khansson/Code/branson/src/test/testing_functions.h
+
+/Users/khansson/Code/branson/src/test/testing_functions.h
+cmath
+-
+
